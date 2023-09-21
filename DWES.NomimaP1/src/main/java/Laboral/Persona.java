@@ -9,12 +9,11 @@ package Laboral;
  */
 
 public class Persona {
-	
-	public String nombre , dni;
+
+	public String nombre, dni;
 
 	public char sexo;
-	
-	
+
 	/**
 	 * Constructor completo de persona
 	 * 
@@ -22,20 +21,21 @@ public class Persona {
 	 * @param dni
 	 * @param sexo
 	 * 
-	 * */
+	 */
 	public Persona(String nombre, String dni, char sexo) {
 		super();
 		this.nombre = nombre;
 		this.dni = dni;
 		this.sexo = sexo;
 	}
-	
+
 	/**
 	 * Constructor parcial de persona
+	 * 
 	 * @param nombre
 	 * @param sexo
 	 * 
-	 * */
+	 */
 	public Persona(String nombre, char sexo) {
 		super();
 		this.nombre = nombre;
@@ -48,31 +48,23 @@ public class Persona {
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	
-	
-	/** 
+
+	/**
 	 * 
 	 * Metodo para la impresion en pantalla de los datos del empleado
 	 * 
 	 * @param nombre
-	 * @param dni 
+	 * @param dni
 	 * 
 	 * 
-	 * */
-	
+	 */
+
 	public void Imprime() {
-		
-		System.out.printf("Nombre : %d /n",nombre);
-		
-		System.out.printf("Dni : %d /n",dni);
-		
+
+		System.out.printf("Nombre : %d /n", nombre);
+
+		System.out.printf("Dni : %d /n", dni);
+
 	}
 
-
-	
-	
-	
-	
-	
-	
 }
