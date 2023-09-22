@@ -34,14 +34,14 @@ public class Empleado extends Persona {
 
 		} else {
 
-			throw new InvalidAttributeValueException("Dato Erroneo");
+			throw new DatosNoCorrectosException("Dato Erroneo");
 		}
 
 		if (anyos >= 0) {
 			this.anyos = anyos;
 		} else {
 
-			throw new InvalidAttributeValueException("Dato Erroneo");
+			throw new DatosNoCorrectosException("Dato Erroneo");
 
 		}
 
@@ -62,7 +62,7 @@ public class Empleado extends Persona {
 
 		categoria = 1;
 		anyos = 0;
-
+		
 	}
 
 	/**
@@ -78,6 +78,8 @@ public class Empleado extends Persona {
 	public void setCategoria(int categoria) {
 		this.categoria = categoria;
 	}
+	
+	
 
 	/**
 	 * 
@@ -104,5 +106,9 @@ public class Empleado extends Persona {
 		System.out.println("Anyos trabajados : " + anyos);
 
 	}
+
+	
+
+	
 
 }
