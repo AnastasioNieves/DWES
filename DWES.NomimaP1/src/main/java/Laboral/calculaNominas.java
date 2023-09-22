@@ -23,6 +23,13 @@ public class calculaNominas {
 
 			escribe(e1);
 			escribe(e2);
+			
+			 e2.incrAnyo();
+
+	            e1.setCategoria(9);
+
+	            escribe(e1);
+				escribe(e2);
 
 		} catch (Exception e) {
 			System.out.println(e);
