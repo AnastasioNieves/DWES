@@ -3,30 +3,12 @@ package Laboral;
 import java.io.*;
 import java.util.ArrayList;
 
-/**
- * Clase principal
- * 
- * @author Anastasio
- *
- */
 public class calculaNominas {
 
-    /**
-     * 
-     * Metodo principal para calcular las nominas
-     * 
-     * @throws Exception
-     * @throws IOException
-     * @throws NumberFormatException
-     * 
-     */
-    public static void main(String[] args) throws NumberFormatException, IOException, Exception {
+    public static void main(String[] args) {
         try {
-            // Array para el almacenamiento de empleados
             ArrayList<Empleado> empleados = new ArrayList<Empleado>();
-
-            // Lectura de datos desde Empleados.txt utilizando java.io
-            BufferedReader entradaArchivo = new BufferedReader(new FileReader("empleados.txt"));
+            BufferedReader entradaArchivo = new BufferedReader(new FileReader("C:\\Users\\usuario23\\Desktop\\DWES\\DWES.NomimaP1\\src\\main\\java\\Laboral\\Empleados.txt"));
             String linea;
 
             while ((linea = entradaArchivo.readLine()) != null) {
@@ -51,49 +33,43 @@ public class calculaNominas {
                     throw new DatosNoCorrectosException("Datos Erroneos");
                 }
                 
-                entradaArchivo.close();
+                
+                
             }
-
+            entradaArchivo.close();
             
 
-            // Escribir DNIs y salarios calculados en el archivo binario "sueldos.dat"
             DataOutputStream archivoSalida = new DataOutputStream(new FileOutputStream("sueldos.dat"));
 
             for (Empleado empleado : empleados) {
                 Nomina nomina = new Nomina();
-
-                // Calcular el sueldo
                 double salario = nomina.sueldo(empleado);
-
-                // Escribir el DNI y el sueldo en sueldos.dat
                 archivoSalida.writeUTF(empleado.dni);
                 archivoSalida.writeDouble(salario);
             }
 
             archivoSalida.close();
 
-            // Mostrar información de los empleados y sus sueldos
             for (Empleado empleado : empleados) {
                 escribe(empleado);
             }
 
-            // Realizar cualquier otra operación o modificación de empleados si es necesario
             Empleado primerEmpleado = empleados.get(0);
             primerEmpleado.incrAnyo();
             primerEmpleado.setCategoria(9);
             escribe(primerEmpleado);
 
         } catch (DatosNoCorrectosException e) {
-            System.out.println("Algun dato es invalido");
+            System.out.println("Algun dato es inválido");
+        } catch (IOException e) {
+            System.out.println("Error de E/S: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error al convertir un número: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error inesperado: " + e.getMessage());
         }
     }
 
-    /**
-     * 
-     * Metodo para escribir en consola los empleados y sus nominas
-     * 
-     * 
-     **/
     private static void escribe(Empleado e) {
         Nomina n = new Nomina();
         e.imprime();

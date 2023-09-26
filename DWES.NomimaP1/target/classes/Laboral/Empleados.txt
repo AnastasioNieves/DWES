@@ -1,3 +1,3 @@
-James Cosling , 32000032G, M, 4, 7.0
-Ada Lovelace, 32000031F, F
+James Cosling,32000032G,M,4,7.0
+Ada Lovelace,32000031F,F
 Anastasio Nieves,30202020F,M,5,10.0 
