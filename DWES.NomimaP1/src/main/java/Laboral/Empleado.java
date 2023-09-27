@@ -84,11 +84,12 @@ public class Empleado extends Persona {
 	/**
 	 * 
 	 * Metodo para incrementar los años
+	 * @return 
 	 * 
 	 */
-	public void incrAnyo() {
+	public double incrAnyo() {
 
-		this.anyos = anyos + 1;
+		return this.anyos = anyos + 1;
 
 	}
 

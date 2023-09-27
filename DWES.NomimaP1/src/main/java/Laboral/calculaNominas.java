@@ -12,13 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-
-
 public class calculaNominas {
 
 	public static void main(String[] args) throws SQLException {
-		/*Lectura por texto plano*/
-		
+		/* Lectura por texto plano */
+
 //		try {
 //			ArrayList<Empleado> empleados = new ArrayList<Empleado>();
 //			@SuppressWarnings("resource")
@@ -80,98 +78,132 @@ public class calculaNominas {
 //		} catch (Exception e) {
 //			System.out.println("Error inesperado: " + e.getMessage());
 //		}
-		
-		
+
 		Connection conn = null;
 		try {
-		    // URL de conexión a la base de datos
-		    String url = "jdbc:mariadb://localhost:3306/Empleados";
-		    
-		    // Credenciales de acceso a la base de datos (usuario y contraseña)
-		    String user = "root";
-		    String password = "12345";
-		    
-		    // Establecer la conexión
-		    conn = DriverManager.getConnection(url, user, password);
-		    
-		    //  consultas SQL para obtener los datos de los empleados y nóminas.
-		    
-		} catch (SQLException e) {
-		    e.printStackTrace();
-		} finally {
-		    if (conn != null) {
-		        try {
-		            conn.close();
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-		        }
-		    }
-		}
+			// URL de conexión a la base de datos
+			String url = "jdbc:mariadb://localhost:3306/Empleados";
 
-		
-		// Crear una consulta SQL para obtener los empleados y sus datos
-		String query = "SELECT nombre, dni, sexo, categoria, salario_base FROM Empleados";
-		// Crear una declaración
-		Statement stmt = null;
+			// Credenciales de acceso a la base de datos (usuario y contraseña)
+			String user = "root";
+			String password = "12345";
+
+			// Establecer la conexión
+			conn = DriverManager.getConnection(url, user, password);
+
+			// Crear una consulta SQL para obtener los empleados y sus datos
+			String query = "SELECT nombre, dni, sexo, categoria, anyos FROM Empleado";
+
+			// Crear una declaración
+			Statement st = conn.createStatement();
+
+			// inserta los empleados
+			insertarEmpleado(conn, "James Cosling", "32000032G", 'M', 4, 7.0);
+			insertarEmpleado(conn, "Ada Lovelace", "32000031F", 'F');
+			insertarEmpleado(conn, "Anastasio ", "30202020F", 'M', 5, 10.0);
+			// Ejecutar la consulta y obtener un conjunto de resultados
+			ResultSet resultSet = st.executeQuery(query);
+
+			ArrayList<Empleado> empleados = new ArrayList<Empleado>();
+
+			while (resultSet.next()) {
+				String nombre = resultSet.getString("nombre");
+				String dni = resultSet.getString("dni");
+				char sexo = resultSet.getString("sexo").charAt(0);
+				int categoria = resultSet.getInt("categoria");
+				double anyos = resultSet.getDouble("anyos");
+
+				Empleado empleado;
+				try {
+					empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
+					empleados.add(empleado);
+				} catch (Exception e) {
+
+					e.printStackTrace();
+				}
+
+			}
+
+			updateCategoriaEmpleado(conn, "32000032G", 9);
+
+			// Crear una consulta SQL para actualizar el sueldo en la tabla Nominas
+			String updateQuery = "UPDATE nominas SET sueldo = ? WHERE dni = ?";
+			PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+
+			for (Empleado empleado : empleados) {
+				Nomina nomina = new Nomina();
+				double salario = nomina.sueldo(empleado);
+
+				// Actualizar la tabla Nominas con el sueldo calculado
+				updateStatement.setDouble(1, salario);
+				updateStatement.setString(2, empleado.dni);
+				updateStatement.executeUpdate();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static void insertarEmpleado(Connection conn, String nombre, String dni, char sexo) {
+		String insertQuery = "INSERT INTO Empleado (nombre, dni, sexo, categoria, anyos) VALUES (?, ?, ?)";
+		PreparedStatement insertStatement;
 		try {
-			stmt = conn.createStatement();
+			insertStatement = conn.prepareStatement(insertQuery);
+			insertStatement.setString(1, nombre);
+			insertStatement.setString(2, dni);
+			insertStatement.setString(3, String.valueOf(sexo));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Ejecutar la consulta y obtener un conjunto de resultados
-		ResultSet resultSet = stmt.executeQuery(query);
 
-		// Iterar a través de los resultados y crear objetos Empleado
-		
-		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
-		
-		while (resultSet.next()) {
-		    String nombre = resultSet.getString("nombre");
-		    String dni = resultSet.getString("dni");
-		    char sexo = resultSet.getString("sexo").charAt(0);
-		    int categoria = resultSet.getInt("categoria");
-		    double salarioBase = resultSet.getDouble("salario_base");
-		    
-		    Empleado empleado;
-			try {
-				empleado = new Empleado(nombre, dni, sexo, categoria, salarioBase);
-				 empleados.add(empleado);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		   
-		}
-		
-		// Crear una consulta SQL para actualizar el sueldo en la tabla Nominas
-		String updateQuery = "UPDATE Nominas SET sueldo = ? WHERE dni = ?";
+	}
+
+	private static void insertarEmpleado(Connection conn, String nombre, String dni, char sexo, int categoria, double d)
+			throws SQLException {
+		String insertQuery = "INSERT INTO Empleado (nombre, dni, sexo, categoria, anyos) VALUES (?, ?, ?, ?, ?)";
+		PreparedStatement insertStatement = conn.prepareStatement(insertQuery);
+
+		insertStatement.setString(1, nombre);
+		insertStatement.setString(2, dni);
+		insertStatement.setString(3, String.valueOf(sexo));
+		insertStatement.setInt(4, categoria);
+		insertStatement.setDouble(5, d);
+
+		insertStatement.executeUpdate();
+	}
+
+	private static void updateCategoriaEmpleado(Connection conn, String dni, int nuevaCategoria) throws SQLException {
+		String updateQuery = "UPDATE Empleado SET categoria = ? WHERE dni = ?";
 		PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
 
-		for (Empleado empleado : empleados) {
-		    Nomina nomina = new Nomina();
-		    double salario = nomina.sueldo(empleado);
-		    
-		    // Actualizar la tabla Nominas con el sueldo calculado
-		    updateStatement.setDouble(1, salario);
-		    updateStatement.setString(2, empleado.dni);
-		    updateStatement.executeUpdate();
-		}
+		updateStatement.setInt(1, nuevaCategoria);
+		updateStatement.setString(2, dni);
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		updateStatement.executeUpdate();
 	}
 
-	private static void escribe(Empleado e) {
-		Nomina n = new Nomina();
-		e.imprime();
-		System.out.println(n.sueldo(e));
+	private static void updateAnyosEmpleado(Connection conn, Empleado empleado) throws SQLException {
+		String updateQuery = "UPDATE Empleado SET anyo = ? WHERE dni = ?";
+		PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+
+		updateStatement.setDouble(1, empleado.incrAnyo());
+
+		updateStatement.executeUpdate();
 	}
 }
+
+//	private static void escribe(Empleado e) {
+//		Nomina n = new Nomina();
+//		e.imprime();
+//		System.out.println(n.sueldo(e));
+//	}
