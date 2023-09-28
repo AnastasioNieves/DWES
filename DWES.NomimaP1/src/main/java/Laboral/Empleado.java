@@ -60,8 +60,8 @@ public class Empleado extends Persona {
 	public Empleado(String nombre, String dni, char sexo) {
 		super(nombre, dni, sexo);
 
-		categoria = 1;
-		anyos = 0;
+		this.categoria = 1;
+		this.anyos = 0;
 		
 	}
 
