@@ -34,7 +34,7 @@ public class Empleado extends Persona {
 
 		} else {
 
-			throw new DatosNoCorrectosException("Dato Erroneo");
+			this.categoria = 1;
 		}
 
 		if (anyos >= 0) {

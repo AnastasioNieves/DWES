@@ -11,7 +11,7 @@ public class calculaNominas {
 			
 			conBD.tryConect();
 			
-			
+		
 			
 		} catch (Exception e) {
 			e.getMessage();
