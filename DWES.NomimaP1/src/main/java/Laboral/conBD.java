@@ -28,7 +28,7 @@ public class conBD {
 
 			// inserta los empleados
 			insertarEmpleado(conn, "James Cosling", "32000032G", 'M', 4, 7.0);
-			insertarEmpleado(conn, "Ada Lovelace", "32000031F", 'F', 0, 0);
+			insertarEmpleado(conn, "Ada Lovelace", "32000031F", 'F', 1, 0);
 			insertarEmpleado(conn, "Anastasio ", "30202020F", 'M', 5, 10.0);
 
 			// Crear una consulta SQL para obtener los empleados y sus datos
@@ -51,14 +51,32 @@ public class conBD {
 
 					empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
 					empleados.add(empleado);
-					
 
 				} catch (Exception e) {
 
 					e.printStackTrace();
 				}
 
+			}// Actualizar la categoría del empleado
+			updateCategoriaEmpleado(conn, "32000032G", 9);
+
+			// Actualizar los años del empleado
+			updateAnyosEmpleado(conn, "32000032G");
+			
+			
+			
+
+			for (Empleado empleado : empleados) {
+
+				Nomina nomina = new Nomina();
+				double sueldo = nomina.sueldo(empleado);
+
+				ResultSet num = st
+						.executeQuery("Insert INTO nomina (dni,sueldo) VALUES ('" + empleado.dni + "'," + sueldo + ")");
+				System.out.println("Nomina insertada (" + num + "filas) ");
 			}
+
+			
 
 			// Crear una consulta SQL para actualizar el sueldo en la tabla Nominas
 			String updateQuery = "UPDATE nomina SET sueldo = ? WHERE dni = ?";
@@ -71,26 +89,11 @@ public class conBD {
 
 				// Actualizar la tabla Nominas con el sueldo calculado
 
-				updateStatement.setString(1, empleado.dni);
-				updateStatement.setDouble(2, sueldo);
+				
+				updateStatement.setDouble(1, sueldo);
+				updateStatement.setString(2, empleado.dni);
 				updateStatement.executeUpdate();
 			}
-
-			for (Empleado empleado : empleados) {
-
-				Nomina nomina = new Nomina();
-				double sueldo = nomina.sueldo(empleado);
-
-				ResultSet num = st
-						.executeQuery("Insert INTO nomina (dni,sueldo) VALUES ('" + empleado.dni + "'," + sueldo + ")");
-				System.out.println("Nomina insertada (" + num + "filas) ");
-			}
-
-			// Actualizar la categoría del empleado
-			updateCategoriaEmpleado(conn, "32000032G", 9);
-
-			// Actualizar los años del empleado
-			updateAnyosEmpleado(conn, "32000032G");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,24 +114,43 @@ public class conBD {
 		System.out.println(n.sueldo(e));
 	}
 
-	private static void insertarEmpleado(Connection conn, String nombre, String dni, char sexo, int categoria, double anyos) throws SQLException {
+	private static void insertarEmpleado(Connection conn, String nombre, String dni, char sexo, int categoria,
+			double anyos) throws SQLException {
 		String insertQuery = "INSERT INTO Empleado (nombre, dni, sexo, categoria, anyos) VALUES (?, ?, ?, ?, ?)";
 		PreparedStatement insertStatement = conn.prepareStatement(insertQuery);
-		
-		Empleado empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
-		
-		insertStatement.setString(1, nombre);
-		insertStatement.setString(2, dni);
-		insertStatement.setString(3, String.valueOf(sexo));
-		insertStatement.setInt(4, categoria);
-		insertStatement.setDouble(5, anyos);
 
-	
-
+		Empleado empleado;
 		try {
-			
-			insertStatement.executeUpdate();
-			escribe(empleado);
+
+			empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
+
+			if (empleado.getCategoria() <= 1 && empleado.anyos <= 0) {
+
+				empleado.setCategoria(1);
+				empleado.anyos = 0;
+
+				insertStatement.setString(1, nombre);
+				insertStatement.setString(2, dni);
+				insertStatement.setString(3, String.valueOf(sexo));
+				insertStatement.setInt(4, categoria);
+				insertStatement.setDouble(5, anyos);
+
+				insertStatement.executeUpdate();
+				escribe(empleado);
+
+			} else {
+
+				insertStatement.setString(1, nombre);
+				insertStatement.setString(2, dni);
+				insertStatement.setString(3, String.valueOf(sexo));
+				insertStatement.setInt(4, categoria);
+				insertStatement.setDouble(5, anyos);
+
+				insertStatement.executeUpdate();
+				escribe(empleado);
+
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
