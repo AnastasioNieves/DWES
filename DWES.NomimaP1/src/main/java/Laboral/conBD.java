@@ -8,27 +8,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class conBD {
+public class ConBD {
 
 	public static void tryConect() throws SQLException {
 		Connection conn = null;
 		try {
-			// URL de conexión a la base de datos
-			String url = "jdbc:mariadb://localhost:3306/Empleados";
-
-			// Credenciales de acceso a la base de datos (usuario y contraseña)
-			String user = "root";
-			String password = "12345";
-
-			// Establecer la conexión
-			conn = DriverManager.getConnection(url, user, password);
+			conn = connection();
 
 			// Crear una declaración
 			Statement st = conn.createStatement();
 
 			// inserta los empleados
 			insertarEmpleado(conn, "James Cosling", "32000032G", 'M', 4, 7.0);
-			insertarEmpleado(conn, "Ada Lovelace", "32000031F", 'F', 1, 0);
+			insertarEmpleado(conn, "Ada Lovelace", "32000031F", 'F');
 			insertarEmpleado(conn, "Anastasio ", "30202020F", 'M', 5, 10.0);
 
 			// Crear una consulta SQL para obtener los empleados y sus datos
@@ -57,14 +49,7 @@ public class conBD {
 					e.printStackTrace();
 				}
 
-			}// Actualizar la categoría del empleado
-			updateCategoriaEmpleado(conn, "32000032G", 9);
-
-			// Actualizar los años del empleado
-			updateAnyosEmpleado(conn, "32000032G");
-			
-			
-			
+			}
 
 			for (Empleado empleado : empleados) {
 
@@ -76,24 +61,13 @@ public class conBD {
 				System.out.println("Nomina insertada (" + num + "filas) ");
 			}
 
-			
+			// Actualizar la categoría del empleado
+			updateCategoriaEmpleado(conn, "32000032G", 9);
 
-			// Crear una consulta SQL para actualizar el sueldo en la tabla Nominas
-			String updateQuery = "UPDATE nomina SET sueldo = ? WHERE dni = ?";
-			PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+			// Actualizar los años del empleado
+			updateAnyosEmpleado(conn, "32000032G");
 
-			for (Empleado empleado : empleados) {
-
-				Nomina nomina = new Nomina();
-				double sueldo = nomina.sueldo(empleado);
-
-				// Actualizar la tabla Nominas con el sueldo calculado
-
-				
-				updateStatement.setDouble(1, sueldo);
-				updateStatement.setString(2, empleado.dni);
-				updateStatement.executeUpdate();
-			}
+			upodateNomina(conn, "32000032G");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -106,6 +80,64 @@ public class conBD {
 			}
 		}
 
+	}
+
+	public static Connection connection() throws SQLException {
+		Connection conn;
+		// URL de conexión a la base de datos
+		String url = "jdbc:mariadb://localhost:3306/Empleados";
+
+		// Credenciales de acceso a la base de datos (usuario y contraseña)
+		String user = "root";
+		String password = "12345";
+
+		// Establecer la conexión
+		conn = DriverManager.getConnection(url, user, password);
+		return conn;
+	}
+
+	private static void upodateNomina(Connection conn, String dni) throws SQLException {
+
+		// Crear una declaración
+		Statement st = conn.createStatement();
+		// Crear una consulta SQL para actualizar el sueldo en la tabla Nominas
+		String updateQuery = "UPDATE nomina SET sueldo = ? WHERE dni = ?";
+		PreparedStatement updateStatement = conn.prepareStatement(updateQuery);
+
+		// Crear una consulta SQL para obtener los empleados y sus datos
+		String query = "SELECT nombre, dni, sexo, categoria, anyos FROM Empleado";
+
+		// Ejecutar la consulta y obtener un conjunto de resultados
+		ResultSet resultSet = st.executeQuery(query);
+		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
+
+		while (resultSet.next()) {
+			String nombre = resultSet.getString("nombre");
+			dni = resultSet.getString("dni");
+			char sexo = resultSet.getString("sexo").charAt(0);
+			int categoria = resultSet.getInt("categoria");
+			double anyos = resultSet.getDouble("anyos");
+
+			Empleado empleado;
+			try {
+
+				empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
+				empleados.add(empleado);
+				Nomina nomina = new Nomina();
+				double sueldo = nomina.sueldo(empleado);
+				// Actualizar la tabla Nominas con el sueldo calculado
+
+				updateStatement.setDouble(1, sueldo);
+				updateStatement.setString(2, empleado.dni);
+				updateStatement.executeUpdate();
+				escribe(empleado);
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	private static void escribe(Empleado e) {
@@ -124,32 +156,36 @@ public class conBD {
 
 			empleado = new Empleado(nombre, dni, sexo, categoria, anyos);
 
-			if (empleado.getCategoria() <= 1 && empleado.anyos <= 0) {
+			insertStatement.setString(1, nombre);
+			insertStatement.setString(2, dni);
+			insertStatement.setString(3, String.valueOf(sexo));
+			insertStatement.setInt(4, categoria);
+			insertStatement.setDouble(5, anyos);
 
-				empleado.setCategoria(1);
-				empleado.anyos = 0;
+			insertStatement.executeUpdate();
+			escribe(empleado);
 
-				insertStatement.setString(1, nombre);
-				insertStatement.setString(2, dni);
-				insertStatement.setString(3, String.valueOf(sexo));
-				insertStatement.setInt(4, categoria);
-				insertStatement.setDouble(5, anyos);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-				insertStatement.executeUpdate();
-				escribe(empleado);
+	private static void insertarEmpleado(Connection conn, String nombre, String dni, char sexo) throws SQLException {
+		String insertQuery = "INSERT INTO Empleado (nombre, dni, sexo) VALUES (?, ?, ?)";
+		PreparedStatement insertStatement = conn.prepareStatement(insertQuery);
 
-			} else {
+		Empleado empleado;
+		try {
 
-				insertStatement.setString(1, nombre);
-				insertStatement.setString(2, dni);
-				insertStatement.setString(3, String.valueOf(sexo));
-				insertStatement.setInt(4, categoria);
-				insertStatement.setDouble(5, anyos);
+			empleado = new Empleado(nombre, dni, sexo);
 
-				insertStatement.executeUpdate();
-				escribe(empleado);
+			insertStatement.setString(1, nombre);
+			insertStatement.setString(2, dni);
+			insertStatement.setString(3, String.valueOf(sexo));
 
-			}
+			insertStatement.executeUpdate();
+			escribe(empleado);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -176,4 +212,5 @@ public class conBD {
 
 		updateStatement.executeUpdate();
 	}
+
 }

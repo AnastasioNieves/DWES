@@ -4,7 +4,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class lecturaFichero {
+public class LecturaFichero {
 
 	public static void lecFichero() throws SQLException {
 		/* Lectura por texto plano */
