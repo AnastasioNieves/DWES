@@ -20,7 +20,7 @@ public class NominaDAO {
 
     private double obtenerSalarioBasePorCategoria(int categoria) {
         double salarioBase = 0.0;
-        String sql = "SELECT salario_base FROM categorias WHERE categoria = ?";
+        String sql = "SELECT salario FROM categorias WHERE categoria = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, categoria);
@@ -36,5 +36,5 @@ public class NominaDAO {
         return salarioBase;
     }
 
-    // Otros métodos relacionados con nóminas, como registrar, actualizar o eliminar nóminas
+  
 }

@@ -4,13 +4,13 @@
 <html>
 <head>
     <title>Menú Principal</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/Styles.css">
     
 </head>
 <body>
     <h1>Menú Principal</h1>
     <ul>
-        <li><a href="empresa?opcion=mostarEmpleado">Mostrar Información de Empleados</a></li>
+        <li><a href="empresa?opcion=mostrarEmpleados">Mostrar Información de Empleados</a></li>
         <li><a href="empresa?opcion=mostrarSalario">Mostrar Salario de un Empleado</a></li>
         <li><a href="empresa?opcion=editar">Modificar Datos de un Empleado</a></li>
         <li><a href="empresa?opcion=buscarEmpleados">Búsqueda de Empleados</a></li>

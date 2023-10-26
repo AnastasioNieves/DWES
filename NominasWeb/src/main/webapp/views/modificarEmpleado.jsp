@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Modificar Datos de un Empleado</title>
-<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link rel="stylesheet" type="text/css" href="css/Styles.css">
 
 </head>
 <body>
@@ -16,7 +16,7 @@
         <a href="empresa?opcion=mostarEmpleado">Mostrar Empleados</a>
         <a href="empresa?opcion=mostrarSalario">Mostrar Salario</a>
         <a href="empresa?opcion=editar">Modificar Empleado</a>
-        <a href="empresa?opcion=buscarEmpleadosForm">Buscar Empleados</a>
+        <a href="empresa?opcion=buscarEmpleados">Buscar Empleados</a>
     </div>
 </div>
     <h1>Modificar Datos de Empleado</h1>

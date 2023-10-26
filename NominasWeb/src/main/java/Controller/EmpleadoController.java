@@ -12,9 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import DAO.DatosNoCorrectosException;
 import DAO.EmpleadoDAO;
 import Model.Empleado;
-import Model.Nomina;
+
 /**
  * Servlet implementation class ProductoController
  */
@@ -40,24 +41,39 @@ public class EmpleadoController extends HttpServlet {
 
 		String opcion = request.getParameter("opcion");
 
-		 if (opcion.equals("index")) {
-		    RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
-		    requestDispatcher.forward(request, response);
-		        
-		} else if (opcion.equals("mostarEmpleado")) {
-			obtenerEmpleado(request, response);
-			
+		if (opcion.equals("index")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+			requestDispatcher.forward(request, response);
+
+		} else if (opcion.equals("mostrarEmpleados")) {
+			List<Empleado> empleados = new ArrayList<>();
+			EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+			try {
+				empleados = empleadoDAO.obtenerEmpleados();
+				// Establecer la lista de empleados en el atributo "empleados" del objeto
+				// request
+				request.setAttribute("empleados", empleados);
+
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarEmpleados.jsp");
+				requestDispatcher.forward(request, response);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		} else if (opcion.equals("mostrarSalario")) {
-	        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarSalario.jsp");
-	        requestDispatcher.forward(request, response);
-	        
-	    } else if (opcion.equals("editar")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarSalario.jsp");
+			requestDispatcher.forward(request, response);
+
+		} else if (opcion.equals("buscarEmpleados")) {
+			// Esta opción muestra la página de búsqueda de empleados
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/buscarEmpleados.jsp");
+			requestDispatcher.forward(request, response);
+		} else if (opcion.equals("editar")) {
 			String dni = request.getParameter("dni");
 			System.out.println("Editar por dni: " + dni);
 			EmpleadoDAO empleadoDAO = new EmpleadoDAO();
 			Empleado e = new Empleado();
 			try {
-				e = empleadoDAO.obtenerEmpleado(dni);
+				e = empleadoDAO.obtenerEmpleadoDNI(dni);
 				System.out.println(e);
 				request.setAttribute("empleado", e);
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/modificarEmpleado.jsp");
@@ -66,81 +82,11 @@ public class EmpleadoController extends HttpServlet {
 			} catch (SQLException err) {
 				// TODO Auto-generated catch block
 				err.printStackTrace();
-			}
-
-		} else if (opcion.equals("eliminar")) {
-			EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-			int dni = Integer.parseInt(request.getParameter("dni"));
-			try {
-				empleadoDAO.eliminar(dni);
-				obtenerEmpleado(request, response);
-				System.out.println("Registro eliminado satisfactoriamente...");
-				request.setAttribute("mensaje", "Producto eliminado con exito.");
-				RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarEmpleados.jsp");
-				requestDispatcher.forward(request, response);
-			} catch (SQLException err) {
+			} catch (DatosNoCorrectosException e1) {
 				// TODO Auto-generated catch block
-				err.printStackTrace();
+				e1.printStackTrace();
 			}
 
-		}else if (opcion.equals("buscarEmpleados")) {
-		    // Esta opción muestra la página de búsqueda de empleados
-		    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/buscarEmpleados.jsp");
-		    requestDispatcher.forward(request, response);
 		}
-
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String opcion = request.getParameter("opcion");
-		if (opcion.equals("buscarSalario")) {
-		    // Código para buscar un empleado por DNI y calcular su salario
-		    String dniBusqueda = request.getParameter("dniBusqueda");
-
-		    if (dniBusqueda != null && !dniBusqueda.isEmpty()) {
-		    	Nomina nomina = new Nomina();
-		    	EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-		    	try {
-			    	Empleado empleado = empleadoDAO.obtenerEmpleado(dniBusqueda);
-			    	double salario = nomina.sueldo(empleado);
-
-			    	request.setAttribute("empleado", empleado);
-			      	request.setAttribute("sueldo", salario);
-			      	
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			    RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarSalario.jsp");
-			    requestDispatcher.forward(request, response);
-		    }
-		  }
-		}
-
-	public List<Empleado> obtenerEmpleado(HttpServletRequest request, HttpServletResponse response) {
-		EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-		List<Empleado> lista = new ArrayList<>();
-		try {
-			lista = empleadoDAO.obtenerEmpleados();
-			for (Empleado empleado : lista) {
-				System.out.println(empleado);
-			}
-
-			request.setAttribute("lista", lista);
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/mostrarEmpleados.jsp");
-			requestDispatcher.forward(request, response);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return lista;
-	}
-
 }

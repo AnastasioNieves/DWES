@@ -57,6 +57,10 @@ public class Empleado extends Persona
 
 	
 
+	public void setAnyos(double anyos) {
+		this.anyos = anyos;
+	}
+
 	public Empleado() {
 		// TODO Auto-generated constructor stub
 	}
@@ -68,6 +72,15 @@ public class Empleado extends Persona
 	public int getCategoria() {
 		return categoria;
 	}
+	
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setSexo(char sexo) {
+        this.sexo = sexo;
+    }
 	
 	/**
 	 * Setter de categoria

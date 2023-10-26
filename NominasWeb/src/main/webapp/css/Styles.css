@@ -1,13 +1,33 @@
 @charset "ISO-8859-1";
 
-/* Estilos generales para centrar contenido en un contenedor */
-.container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-}
+body {
+            background-color: #f7ecd6;
+            text-align: center;
+        }
 
+        #container {
+            margin: 100px auto;
+            width: 60%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+       li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            background-color: #4caf50;
+            color: #fff;
+            padding: auto 10%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+         	display: inline-block;
+        }
 /* Estilos para la cabecera y el menú de navegación */
 .header {
     background-color: #333;
