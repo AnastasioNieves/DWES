@@ -1,0 +1,27 @@
+@charset "ISO-8859-1";
+
+/* Estilos generales para centrar contenido en un contenedor */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Estilos para la cabecera y el menú de navegación */
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 20px;
+}
