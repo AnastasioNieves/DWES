@@ -1,1 +1,1 @@
-<h1> Pagina bienvenida</h1>
+<h1> Contenido Vacio</h1>

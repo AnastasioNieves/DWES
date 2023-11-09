@@ -29,7 +29,7 @@ public class EmpleadoDAO {
         connection = obtenerConexion();
 
         try {
-            sql = "SELECT * FROM empleados";
+            sql = "SELECT * FROM empleados WHERE deleted = 'N'";
             statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
 
@@ -39,19 +39,19 @@ public class EmpleadoDAO {
                 char sexo = resultSet.getString(3).charAt(0);
                 int categoria = resultSet.getInt(4);
                 double anyos = resultSet.getDouble(5);
-
-                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                char deleted = resultSet.getString(6).charAt(0);  // Ajusta la posición del campo 'deleted'
+                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos, deleted));
             }
 
             statement.close();
             connection.close();
-
         } catch (SQLException | DatosNoCorrectosException err) {
             err.printStackTrace();
         }
 
         return lista;
     }
+
 
     public Empleado obtenerEmpleado(String dniEmpleado) throws SQLException {
         ResultSet resultSet = null;
@@ -62,7 +62,7 @@ public class EmpleadoDAO {
         connection = obtenerConexion();
 
         try {
-            sql = "SELECT * FROM empleados WHERE dni =?";
+        	 sql = "SELECT * FROM empleados WHERE deleted = 'N'";
             statement = connection.prepareStatement(sql);
             statement.setString(1, dniEmpleado);
 
@@ -91,26 +91,15 @@ public class EmpleadoDAO {
         estadoOperacion = false;
         connection = obtenerConexion();
         try {
-            connection.setAutoCommit(false);
-
-            sql = "DELETE FROM nominas WHERE dni=?";
+            sql = "UPDATE empleados SET deleted='Y' WHERE dni=?";
             statement = connection.prepareStatement(sql);
             statement.setString(1, dniEmpleado);
 
             estadoOperacion = statement.executeUpdate() > 0;
-
-            sql = "DELETE FROM empleados WHERE dni=?";
-            statement = connection.prepareStatement(sql);
-            statement.setString(1, dniEmpleado);
-
-            estadoOperacion = statement.executeUpdate() > 0;
-            connection.commit();
 
             statement.close();
             connection.close();
-
         } catch (SQLException e) {
-            connection.rollback();
             e.printStackTrace();
         }
 
@@ -175,8 +164,8 @@ public class EmpleadoDAO {
                 char sexo = resultSet.getString(3).charAt(0);
                 int categoria = resultSet.getInt(4);
                 double anyos = resultSet.getDouble(5);
-
-                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                char deleted = resultSet.getString(3).charAt(0);
+                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos,deleted));
             }
 
             statement.close();
@@ -208,8 +197,8 @@ public class EmpleadoDAO {
                 char sexo = resultSet.getString(3).charAt(0);
                 int categoria = resultSet.getInt(4);
                 double anyos = resultSet.getDouble(5);
-
-                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                char deleted = resultSet.getString(3).charAt(0);
+                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos,deleted));
             }
 
             statement.close();
@@ -241,8 +230,8 @@ public class EmpleadoDAO {
                 char sexo = resultSet.getString(3).charAt(0);
                 int categoria = resultSet.getInt(4);
                 double anyos = resultSet.getDouble(5);
-
-                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                char deleted = resultSet.getString(3).charAt(0);
+                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos,deleted));
             }
 
             statement.close();
@@ -274,8 +263,8 @@ public class EmpleadoDAO {
                 char sexo = resultSet.getString(3).charAt(0);
                 int categoria = resultSet.getInt(4);
                 double anyos = resultSet.getDouble(5);
-
-                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                char deleted = resultSet.getString(3).charAt(0);
+                lista.add(new Empleado(dni, nombre, sexo, categoria, anyos,deleted));
             }
 
             statement.close();
@@ -310,8 +299,8 @@ public class EmpleadoDAO {
                         String nombre = resultSet.getString(2);
                         char sexo = resultSet.getString(3).charAt(0);
                         int categoria = resultSet.getInt(4);
-
-                        lista.add(new Empleado(dni, nombre, sexo, categoria, anyos));
+                        char deleted = resultSet.getString(3).charAt(0);
+                        lista.add(new Empleado(dni, nombre, sexo, categoria, anyos,deleted));
                     }
 
                     statement.close();

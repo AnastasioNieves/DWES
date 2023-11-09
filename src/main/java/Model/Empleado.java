@@ -16,8 +16,17 @@ public class Empleado extends Persona
 	
 	private int categoria;
 	public double anyos;
+	public boolean estadoOperacion;
+	public char deleted;
 	
-	
+	public char getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(char deleted) {
+		this.deleted = deleted;
+	}
+
 	/**
 	 * Constructor Empleado completo
 	 * @param nombre
@@ -27,7 +36,7 @@ public class Empleado extends Persona
 	 * @param anyos
 	 * @throws DatosNoCorrectosException categoria y/o anyos incorrecto
 	 */
-	public Empleado(String nombre, String dni, char sexo, int categoria, double anyos) throws DatosNoCorrectosException {
+	public Empleado(String nombre, String dni, char sexo, int categoria, double anyos, char deleted) throws DatosNoCorrectosException {
 		super(nombre, dni, sexo);
 		if (categoria < 1 || categoria > 10) {
 			throw new DatosNoCorrectosException("ERROR: La categoria debe estar entre 1 y 10");
