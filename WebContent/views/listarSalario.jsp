@@ -1,16 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+
 <%@ page import="Model.Empleado, Model.Nomina"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Listar Salarios</title>
 
-<link rel="stylesheet" href="css/styles.css">
-
-</head>
-<body>
     <a id="volver" href="empresa?opcion=index">
     	<img src="img/x-solid.svg"></img>
     </a>
@@ -40,5 +30,3 @@
 			<%}%>
 		</div>
 	</div>
-</body>
-</html>

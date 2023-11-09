@@ -26,7 +26,7 @@
 					<td>Sexo (M/F)</td>
 					<td>Categoria</td>
 					<td>Años</td>
-					<td colspan="2">Accion</td>
+					
 				</tr>
 				<c:forEach var="empleado" items="${lista}">
 					<tr>
@@ -35,12 +35,7 @@
 						<td><c:out value="${ empleado.sexo}"></c:out></td>
 						<td><c:out value="${ empleado.categoria}"></c:out></td>
 						<td><c:out value="${ empleado.anyos}"></c:out></td>
-						<td><a
-							href="empresa?opcion=eliminar&dni=<c:out value="${ empleado.dni}"></c:out>">
-								Eliminar </a></td>
-						<td><a
-							href="empresa?opcion=editar&dni=<c:out value="${ empleado.dni}"></c:out>">
-								Editar </a></td>
+					
 					</tr>
 				</c:forEach>
 			</table>

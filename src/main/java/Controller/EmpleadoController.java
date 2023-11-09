@@ -41,14 +41,19 @@ public class EmpleadoController extends HttpServlet {
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("listarEmpleado")) {
             // Listar empleados y redireccionar a la página de listado.
+        
             obtenerEmpleado(request, response);
         } else if (opcion.equals("listarSalario")) {
             // Redireccionar a la página de listado de salarios.
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/listarSalario.jsp");
+        	String content = "/views/listarSalario.jsp";
+        	request.setAttribute("content", content);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("buscarEmpleado")) {
             // Redireccionar a la página de búsqueda de empleados.
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/buscarEmpleado.jsp");
+        	String content = "/views/buscarEmpleado.jsp";
+        	request.setAttribute("content", content);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("editar")) {
             // Editar los detalles de un empleado.
@@ -58,7 +63,9 @@ public class EmpleadoController extends HttpServlet {
             try {
                 empleado = empleadoDAO.obtenerEmpleado(dni);
                 request.setAttribute("empleado", empleado);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/editar.jsp");
+            	String content = "/views/buscarEmpleado.jsp";
+            	request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException err) {
                 err.printStackTrace();
@@ -71,7 +78,9 @@ public class EmpleadoController extends HttpServlet {
                 empleadoDAO.eliminar(dni);
                 obtenerEmpleado(request, response);
                 request.setAttribute("mensaje", "Empleado eliminado con éxito.");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/listarEmpleado.jsp");
+                String content = "/views/listarEmpleado.jsp";
+            	request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException err) {
                 err.printStackTrace();
@@ -84,7 +93,9 @@ public class EmpleadoController extends HttpServlet {
                 empleadoDAO.eliminar(dni);
                 obtenerEmpleado(request, response);
                 request.setAttribute("mensaje", "Empleado eliminado con éxito.");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/buscarEmpleado.jsp");
+                String content = "/views/buscarEmpleado.jsp";
+            	request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException err) {
                 err.printStackTrace();
@@ -112,7 +123,9 @@ public class EmpleadoController extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/listarSalario.jsp");
+              	String content = "/views/listarSalario.jsp";
+            	request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             }
         } else if (opcion.equals("buscarEmpleado")) {
@@ -137,7 +150,9 @@ public class EmpleadoController extends HttpServlet {
                 empleadoDAO.editar(empleado);
                 obtenerEmpleado(request, response);
                 request.setAttribute("mensaje", "Empleado editado con éxito.");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/listarEmpleado.jsp");
+            	String content = "/views/listarSalario.jsp";
+            	request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/listarEmpleado.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -154,7 +169,9 @@ public class EmpleadoController extends HttpServlet {
         try {
             lista = empleadoDAO.obtenerEmpleados();
             request.setAttribute("lista", lista);
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/views/listarEmpleado.jsp");
+           	String content = "/views/listarEmpleado.jsp";
+        	request.setAttribute("content", content);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } catch (SQLException | ServletException | IOException e) {
             e.printStackTrace();
