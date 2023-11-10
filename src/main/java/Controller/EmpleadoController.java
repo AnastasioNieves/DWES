@@ -17,9 +17,6 @@ import DAO.EmpleadoDAO;
 import Model.Empleado;
 import Model.Nomina;
 
-/**
- * Servlet para gestionar solicitudes relacionadas con la tabla "empleados".
- */
 @WebServlet(description = "Administra solicitudes para la tabla de empleados", urlPatterns = { "/empresa" })
 public class EmpleadoController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -28,53 +25,43 @@ public class EmpleadoController extends HttpServlet {
         super();
     }
 
-    /**
-     * Maneja las solicitudes HTTP GET.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String opcion = request.getParameter("opcion");
 
         if (opcion.equals("index")) {
-            // Redireccionar a la página de inicio.
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("listarEmpleado")) {
-            // Listar empleados y redireccionar a la página de listado.
-        
             obtenerEmpleado(request, response);
         } else if (opcion.equals("listarSalario")) {
-            // Redireccionar a la página de listado de salarios.
-        	String content = "/views/listarSalario.jsp";
-        	request.setAttribute("content", content);
+            String content = "/views/listarSalario.jsp";
+            request.setAttribute("content", content);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("buscarEmpleado")) {
-            // Redireccionar a la página de búsqueda de empleados.
-        	String content = "/views/buscarEmpleado.jsp";
-        	request.setAttribute("content", content);
+            String content = "/views/buscarEmpleado.jsp";
+            request.setAttribute("content", content);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } else if (opcion.equals("editar")) {
-            // Editar los detalles de un empleado.
             String dni = request.getParameter("dni");
-            EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-            Empleado empleado = new Empleado();
-            try {
-                empleado = empleadoDAO.obtenerEmpleado(dni);
-                request.setAttribute("empleado", empleado);
-            	String content = "/views/editar.jsp";
-            	request.setAttribute("content", content);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
-                requestDispatcher.forward(request, response);
-            } catch (SQLException err) {
-                err.printStackTrace();
+            if (dni != null && !dni.isEmpty()) {
+                // Obtener el empleado a editar
+                EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+                try {
+                    Empleado empleado = empleadoDAO.obtenerEmpleado(dni);
+                    request.setAttribute("empleado", empleado);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
+
+            String content = "/views/editar.jsp";
+            request.setAttribute("content", content);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
+            requestDispatcher.forward(request, response);
         } else if (opcion.equals("eliminar")) {
-            // Eliminar un empleado.
-           
-        	eliminarEmpleado(request, response);
-        	
+            eliminarEmpleado(request, response);
         } else if (opcion.equals("eliminarBusqueda")) {
             // Eliminar un empleado basado en criterios de búsqueda.
             EmpleadoDAO empleadoDAO = new EmpleadoDAO();
@@ -84,7 +71,7 @@ public class EmpleadoController extends HttpServlet {
                 obtenerEmpleado(request, response);
                 request.setAttribute("mensaje", "Empleado eliminado con éxito.");
                 String content = "/views/buscarEmpleado.jsp";
-            	request.setAttribute("content", content);
+                request.setAttribute("content", content);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException err) {
@@ -93,14 +80,10 @@ public class EmpleadoController extends HttpServlet {
         }
     }
 
-    /**
-     * Maneja las solicitudes HTTP POST.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String opcion = request.getParameter("opcion");
+
         if (opcion.equals("buscarSalario")) {
-            // Buscar el salario de un empleado.
             String dniBusqueda = request.getParameter("dniBusqueda");
             if (dniBusqueda != null && !dniBusqueda.isEmpty()) {
                 Nomina nomina = new Nomina();
@@ -113,18 +96,16 @@ public class EmpleadoController extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-              	String content = "/views/listarSalario.jsp";
-            	request.setAttribute("content", content);
+                String content = "/views/listarSalario.jsp";
+                request.setAttribute("content", content);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             }
         } else if (opcion.equals("buscarEmpleado")) {
-            // Buscar empleados por criterios específicos.
             String tipoBusqueda = request.getParameter("tipoBusqueda");
             String valorBusqueda = request.getParameter("valorBusqueda");
             buscarEmpleadosPorCriterio(tipoBusqueda, valorBusqueda, request, response);
         } else if (opcion.equals("editar")) {
-            // Editar los detalles de un empleado.
             Empleado empleado = new Empleado();
             EmpleadoDAO empleadoDAO = new EmpleadoDAO();
             empleado.setDni(request.getParameter("dni"));
@@ -132,17 +113,21 @@ public class EmpleadoController extends HttpServlet {
             empleado.setSexo(request.getParameter("sexo").charAt(0));
             try {
                 empleado.setCategoria(Integer.parseInt(request.getParameter("categoria")));
-                empleado.setAnyos(Double.parseDouble(request.getParameter("anyos")));
-            } catch (NumberFormatException | DatosNoCorrectosException e) {
+            } catch (DatosNoCorrectosException e) {
                 e.printStackTrace();
             }
+            empleado.setAnyos(Double.parseDouble(request.getParameter("anyos")));
+
             try {
-                empleadoDAO.editar(empleado);
-                obtenerEmpleado(request, response);
-                request.setAttribute("mensaje", "Empleado editado con éxito.");
-            	String content = "/views/listarSalario.jsp";
-            	request.setAttribute("content", content);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/listarEmpleado.jsp");
+                if (empleadoDAO.editar(empleado)) {
+                    obtenerEmpleado(request, response);
+                    request.setAttribute("mensaje", "Empleado editado con éxito.");
+                } else {
+                    request.setAttribute("error", "Error al editar empleado.");
+                }
+                String content = "/views/listarEmpleado.jsp";
+                request.setAttribute("content", content);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -150,17 +135,14 @@ public class EmpleadoController extends HttpServlet {
         }
     }
 
-    /**
-     * Obtiene la lista de empleados y redirecciona a la página de listado.
-     */
     public List<Empleado> obtenerEmpleado(HttpServletRequest request, HttpServletResponse response) {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         List<Empleado> lista = new ArrayList<>();
         try {
             lista = empleadoDAO.obtenerEmpleados();
             request.setAttribute("lista", lista);
-           	String content = "/views/listarEmpleado.jsp";
-        	request.setAttribute("content", content);
+            String content = "/views/listarEmpleado.jsp";
+            request.setAttribute("content", content);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
         } catch (SQLException | ServletException | IOException e) {
@@ -169,9 +151,6 @@ public class EmpleadoController extends HttpServlet {
         return lista;
     }
 
-    /**
-     * Busca empleados según un criterio específico y redirecciona a la página de búsqueda.
-     */
     private List<Empleado> buscarEmpleadosPorCriterio(String tipoBusqueda, String valorBusqueda,
             HttpServletRequest request, HttpServletResponse response) {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
@@ -195,12 +174,11 @@ public class EmpleadoController extends HttpServlet {
                         lista = empleadoDAO.buscarPorAnyosTrabajados(valorBusqueda);
                         break;
                     default:
-                        // Manejo de un tipo de búsqueda no válido
                         break;
                 }
                 request.setAttribute("lista", lista);
                 String content = "/views/buscarEmpleado.jsp";
-            	request.setAttribute("content", content);
+                request.setAttribute("content", content);
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
                 requestDispatcher.forward(request, response);
             }
@@ -209,9 +187,8 @@ public class EmpleadoController extends HttpServlet {
         }
         return lista;
     }
-    
-    private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+
+    private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EmpleadoDAO empleadoDAO = new EmpleadoDAO();
         String dni = request.getParameter("dni");
 
@@ -219,15 +196,12 @@ public class EmpleadoController extends HttpServlet {
             empleadoDAO.eliminar(dni);
             obtenerEmpleado(request, response);
             request.setAttribute("mensaje", "Empleado marcado como eliminado con éxito.");
-
             String content = "/views/listarEmpleado.jsp";
             request.setAttribute("content", content);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
             requestDispatcher.forward(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
-
-    
 }

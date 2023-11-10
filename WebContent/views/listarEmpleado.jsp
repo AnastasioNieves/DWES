@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
     <a id="volver" href="empresa?opcion=index">
@@ -21,6 +20,8 @@
 				</tr>
 				<c:forEach var="empleado" items="${lista}">
 					<tr>
+						
+						
 						<td><c:out value="${ empleado.dni}"></c:out></td>
 						<td><c:out value="${ empleado.nombre}"></c:out></td>
 						<td><c:out value="${ empleado.sexo}"></c:out></td>

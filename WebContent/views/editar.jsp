@@ -1,16 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Editar empleado</title>
 
-<link rel="stylesheet" href="css/styles.css">
-
-</head>
-<body>
     <a id="volver" href="empresa?opcion=listarEmpleado">
     	<img src="img/x-solid.svg"></img>
     </a>
@@ -20,11 +10,11 @@
 	 <form action="empresa" method="post">
 	  	<c:set var="empleado" value="${empleado}"></c:set>
 	  	<input type="hidden" name="opcion" value="editar">
-	  	<input type="hidden" name="dni" value="${empleado.dni}">
+	  	<input type="hidden" name="dni" value="${empleado.nombre}">
 	  	
 	  	<div id="busqueda">
 			<label for="nombre">Nombre:</label>
-		    <input type="text" name="nombre" size="50" value="${empleado.nombre}">
+		    <input type="text" name="nombre" size="50" value="${empleado.dni}">
 		</div>
 		
 	  	<div id="busqueda">
@@ -45,5 +35,3 @@
 	  	<input type="submit" value="Guardar">
 	 </form>
   	</div>
-</body>
-</html>

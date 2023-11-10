@@ -19,10 +19,10 @@ public class Persona {
 	 * @param dni
 	 * @param sexo
 	 */
-	public Persona(String nombre, String dni, char sexo) {
+	public Persona(String dni,String nombre,  char sexo) {
 		super();
-		this.nombre = nombre;
 		this.dni = dni;
+		this.nombre = nombre;
 		this.sexo = sexo;
 	}
 

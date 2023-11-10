@@ -36,8 +36,8 @@ public class Empleado extends Persona
 	 * @param anyos
 	 * @throws DatosNoCorrectosException categoria y/o anyos incorrecto
 	 */
-	public Empleado(String nombre, String dni, char sexo, int categoria, double anyos, char deleted) throws DatosNoCorrectosException {
-		super(nombre, dni, sexo);
+	public Empleado(String dni, String nombre,  char sexo, int categoria, double anyos) throws DatosNoCorrectosException {
+		super(dni, nombre,  sexo);
 		if (categoria < 1 || categoria > 10) {
 			throw new DatosNoCorrectosException("ERROR: La categoria debe estar entre 1 y 10");
 		} else {
@@ -57,8 +57,8 @@ public class Empleado extends Persona
 	 * @param dni
 	 * @param sexo
 	 */
-	public Empleado(String nombre, String dni, char sexo) {
-		super(nombre, dni, sexo);
+	public Empleado( String dni,String nombre, char sexo) {
+		super(dni,nombre,  sexo);
 		this.categoria = 1;
 		this.anyos = 0;
 	}

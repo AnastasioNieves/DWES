@@ -10,8 +10,8 @@ body {
 
 
 .container {
-	width: 45%;
-	margin: 5% auto 0;
+	width: 55%;
+	margin: 15% auto 0;
 	margin-bottom: 5%;
 	text-align: center;
 	background-color: black;
@@ -22,7 +22,7 @@ body {
 }
 
 #listar {
-	width: 75%;
+	width: 85%;
 }
 
 h1 {
@@ -57,7 +57,7 @@ p {
 }
 
 #inicio table {
-	width: 45%;
+	width: 85%;
 	margin: 10% 0;
 	margin-left: auto;
 	margin-right: auto;
