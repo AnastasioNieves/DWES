@@ -1,0 +1,113 @@
+@charset "ISO-8859-1";
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+		background-color: #08e9ff;
+	
+}
+
+
+
+
+.container {
+	width: 55%;
+	margin: 15% auto 0;
+	margin-bottom: 5%;
+	text-align: center;
+	background-color: black;
+	/* Fondo del contenedor en color #08e9ff */
+	border: none;
+	background-color: powderblue;
+	padding: 10px;
+}
+
+#listar {
+	width: 85%;
+}
+
+h1 {
+	color: #08bcff;
+	/* Título principal en color #08bcff */
+	margin-top: 5%;
+}
+
+a {
+	color: #08bcff;
+	/* Enlaces en color #08bcff */
+	text-decoration: none;
+}
+
+a:hover {
+	color: #0ffff8;
+	/* Color al pasar el mouse en color #0ffff8 */
+}
+
+h1 a {
+	font-weight: bold;
+}
+
+p {
+	color: #08bcff;
+	/* Texto en color #08bcff */
+}
+
+.tabla table {
+	border-collapse: collapse;
+	text-align: center;
+}
+
+#inicio table {
+	width: 85%;
+	margin: 10% 0;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#inicio td {
+	padding: 8%;
+}
+
+#lista table {
+	width: 90%;
+	margin: 5% auto;
+}
+
+#lista td {
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+#ultimoForm {
+	margin-bottom: 4%;
+}
+
+input[type="text"] {
+	width: 20%;
+	border-radius: 4px;
+}
+
+input[type="submit"] {
+	margin: 3%;
+}
+
+#volver {
+	border: none;
+	border-radius: 100%;
+	width: 1.5%;
+	position: absolute;
+	top: 2%;
+	right: 2%;
+	appearance: button;
+}
+
+#volver img {
+	background-color: #fffbf4;
+	/* Fondo del botón volver en color #fffbf4 */
+	width: 100%;
+	padding: 40%;
+	border-radius: 100%;
+}
+
+#busqueda {
+	margin-bottom: 3%;
+}
